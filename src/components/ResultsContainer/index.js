@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import SearchBar from "../SearchBar";
 import ResultList from "../ResultList";
+import API from "../../utils/API";
 
 class Search extends Component {
     state = {
@@ -8,6 +9,12 @@ class Search extends Component {
       results: []
     };
 
+    componentDidMount() {
+        API.getEmployees()
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
+    };
+    
     handleInputChange = event => {
         const { name, value } = event.target;
         this.setState({ [name]: value });
