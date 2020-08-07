@@ -1,0 +1,19 @@
+import React from 'react';
+
+const TableRow = ({ results }) => {
+    return (
+        <tbody>
+            {results.map(emp => (
+                <tr key={emp.id.value}>
+                    <th scope="row"><img src={emp.picture.thumbnail} alt={emp.name.first} className="img-thumbnail" /></th>
+                    <td>{emp.name.first} {emp.name.last}</td>
+                    <td>{emp.phone}</td>
+                    <td>{emp.email}</td>
+                    <td>{emp.dob.date}</td>
+                </tr>
+            ))}
+        </tbody>
+    );
+};
+
+export default TableRow;
