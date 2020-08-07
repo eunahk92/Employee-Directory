@@ -14,20 +14,29 @@ class App extends Component {
   };
 
   componentDidMount() {
+    this.getEmployeeList();
+  };
+  
+  getEmployeeList = () => {
     API.getEmployees()
         .then(res => {
           for (let i = 0; i < res.data.results.length; i++) {
             let dob = new Date(res.data.results[i].dob.date);
             res.data.results[i].dob.date = `${dob.getMonth() + 1}-${dob.getDate()}-${dob.getFullYear()}`;
           }
-          console.log(res.data.results);
           this.setState({ results: res.data.results })
         }).catch(err => console.log(err));
   };
-  
+
   handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
+  };
+
+  sortAscOrder = () => {
+    let employeesArr = this.state.results;
+    let empsByAsc = employeesArr.sort((a, b) => a.name.last > b.name.last ? 1 : -1);
+    this.setState({ results: empsByAsc});
   };
 
   render() {
@@ -40,8 +49,10 @@ class App extends Component {
               handleInputChange={this.handleInputChange}
               />
               <Table>
-                <TableHeader />
-                <TableRow results={this.state.results}/>
+                <TableHeader 
+                  sortAscOrder={this.sortAscOrder}
+                />
+                <TableRow results={this.state.results} />
               </Table>
             </Wrapper>
         </div>
