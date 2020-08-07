@@ -14,32 +14,38 @@ class App extends Component {
   };
 
   componentDidMount() {
-      API.getEmployees()
-          .then(res => this.setState({ results: res.data.results }))
-          .catch(err => console.log(err));
+    API.getEmployees()
+        .then(res => {
+          for (let i = 0; i < res.data.results.length; i++) {
+            let dob = new Date(res.data.results[i].dob.date);
+            res.data.results[i].dob.date = `${dob.getMonth() + 1}-${dob.getDate()}-${dob.getFullYear()}`;
+          }
+          console.log(res.data.results);
+          this.setState({ results: res.data.results })
+        }).catch(err => console.log(err));
   };
   
   handleInputChange = event => {
-      const { name, value } = event.target;
-      this.setState({ [name]: value });
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
   };
 
   render() {
-      return (
-          <div>
-            <Header />
-              <Wrapper>
-                <SearchBar
-                search={this.state.search}
-                handleInputChange={this.handleInputChange}
-                />
-                <Table>
-                  <TableHeader />
-                  <TableRow results={this.state.results}/>
-                </Table>
-              </Wrapper>
-          </div>
-      );
+    return (
+        <div>
+          <Header />
+            <Wrapper>
+              <SearchBar
+              search={this.state.search}
+              handleInputChange={this.handleInputChange}
+              />
+              <Table>
+                <TableHeader />
+                <TableRow results={this.state.results}/>
+              </Table>
+            </Wrapper>
+        </div>
+    );
   }
 }
 
