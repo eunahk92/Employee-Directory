@@ -10,8 +10,9 @@ import API from "./utils/API";
 class App extends Component {
   state = {
     search: "",
-    isAsc: false,
-    results: []
+    nameIsAsc: false,
+    results: [],
+    filteredResults: []
   };
 
   componentDidMount() {
@@ -25,25 +26,28 @@ class App extends Component {
           let dob = new Date(res.data.results[i].dob.date);
           res.data.results[i].dob.date = `${dob.getMonth() + 1}-${dob.getDate()}-${dob.getFullYear()}`;
         }
-        this.setState({ results: res.data.results })
+        this.setState({ 
+          results: res.data.results,
+          filteredResults: res.data.results
+        })
       }).catch(err => console.log(err));
   };
 
   handleInputChange = event => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+    this.setState({ [name]: value }, () => this.filterEmpByName());
   };
 
   sortNames = () => {
-    const newState = { ...this.state };
-    if (!newState.isAsc) {
+    let newState = { ...this.state };
+    if (!newState.nameIsAsc) {
       newState.results = newState.results.sort((a, b) => {
         if (a.name.last === b.name.last) {
           return a.name.first > b.name.first ? 1 : -1
         }
         return a.name.last > b.name.last ? 1 : -1
       });
-      newState.isAsc = true;
+      newState.nameIsAsc = true;
     } else {
       newState.results = newState.results.sort((a, b) => {
         if (a.name.last === b.name.last) {
@@ -51,11 +55,23 @@ class App extends Component {
         }
         return a.name.last < b.name.last ? 1 : -1
       });
-      newState.isAsc = false;
+      newState.nameIsAsc = false;
     }
-
     this.setState(newState);
   };
+
+  filterEmpByName = () => {
+    if (this.state.search.length === 0) {
+      this.setState({ filteredResults: this.state.results })
+    } else {
+      const filteredEmployees = this.state.results.filter(emp => {
+        let fullName = `${emp.name.first} ${emp.name.last}`;
+        fullName = fullName.toLowerCase();
+        return fullName.includes(this.state.search);
+      });
+      this.setState({ filteredResults: filteredEmployees });
+    }
+  }
 
   handleKeyPress = event => event.key === "Enter" && event.preventDefault();
 
@@ -73,7 +89,7 @@ class App extends Component {
                 <TableHeader 
                   sortNames={this.sortNames}
                 />
-                <TableRow results={this.state.results} />
+                <TableRow filteredResults={this.state.filteredResults} />
               </Table>
             </Wrapper>
         </div>
