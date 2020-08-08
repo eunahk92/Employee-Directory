@@ -8,8 +8,8 @@ const TableHeader = props => {
                 <th scope="col">Name 
                     <i type="button" className="fas fa-caret-down" onClick={() => props.sortNames()}></i></th>
                 <th scope="col">Phone Number</th>
-                <th scope="col">Email <i className="fas fa-caret-down"></i></th>
-                <th scope="col">DOB <i className="fas fa-caret-down"></i></th>
+                <th scope="col">Email</th>
+                <th scope="col">DOB</th>
             </tr>
         </thead>
 	);
