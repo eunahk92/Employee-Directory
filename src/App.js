@@ -64,14 +64,15 @@ class App extends Component {
     if (this.state.search.length === 0) {
       this.setState({ filteredResults: this.state.results })
     } else {
+      let searchInput = this.state.search.toLowerCase();
       const filteredEmployees = this.state.results.filter(emp => {
         let fullName = `${emp.name.first} ${emp.name.last}`;
         fullName = fullName.toLowerCase();
-        return fullName.includes(this.state.search);
+        return fullName.includes(searchInput);
       });
       this.setState({ filteredResults: filteredEmployees });
     }
-  }
+  };
 
   handleKeyPress = event => event.key === "Enter" && event.preventDefault();
 
