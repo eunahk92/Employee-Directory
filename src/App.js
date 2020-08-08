@@ -10,6 +10,7 @@ import API from "./utils/API";
 class App extends Component {
   state = {
     search: "",
+    isAsc: false,
     results: []
   };
 
@@ -19,13 +20,13 @@ class App extends Component {
   
   getEmployeeList = () => {
     API.getEmployees()
-        .then(res => {
-          for (let i = 0; i < res.data.results.length; i++) {
-            let dob = new Date(res.data.results[i].dob.date);
-            res.data.results[i].dob.date = `${dob.getMonth() + 1}-${dob.getDate()}-${dob.getFullYear()}`;
-          }
-          this.setState({ results: res.data.results })
-        }).catch(err => console.log(err));
+      .then(res => {
+        for (let i = 0; i < res.data.results.length; i++) {
+          let dob = new Date(res.data.results[i].dob.date);
+          res.data.results[i].dob.date = `${dob.getMonth() + 1}-${dob.getDate()}-${dob.getFullYear()}`;
+        }
+        this.setState({ results: res.data.results })
+      }).catch(err => console.log(err));
   };
 
   handleInputChange = event => {
@@ -33,11 +34,30 @@ class App extends Component {
     this.setState({ [name]: value });
   };
 
-  sortAscOrder = () => {
-    let employeesArr = this.state.results;
-    let empsByAsc = employeesArr.sort((a, b) => a.name.last > b.name.last ? 1 : -1);
-    this.setState({ results: empsByAsc});
+  sortNames = () => {
+    const newState = { ...this.state };
+    if (!newState.isAsc) {
+      newState.results = newState.results.sort((a, b) => {
+        if (a.name.last === b.name.last) {
+          return a.name.first > b.name.first ? 1 : -1
+        }
+        return a.name.last > b.name.last ? 1 : -1
+      });
+      newState.isAsc = true;
+    } else {
+      newState.results = newState.results.sort((a, b) => {
+        if (a.name.last === b.name.last) {
+          return a.name.first < b.name.first ? 1 : -1
+        }
+        return a.name.last < b.name.last ? 1 : -1
+      });
+      newState.isAsc = false;
+    }
+
+    this.setState(newState);
   };
+
+  handleKeyPress = event => event.key === "Enter" && event.preventDefault();
 
   render() {
     return (
@@ -47,10 +67,11 @@ class App extends Component {
               <SearchBar
               search={this.state.search}
               handleInputChange={this.handleInputChange}
+              handleKeyPress={this.handleKeyPress}
               />
               <Table>
                 <TableHeader 
-                  sortAscOrder={this.sortAscOrder}
+                  sortNames={this.sortNames}
                 />
                 <TableRow results={this.state.results} />
               </Table>
