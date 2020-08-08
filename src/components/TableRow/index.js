@@ -1,9 +1,9 @@
 import React from 'react';
 
-const TableRow = ({ results }) => {
+const TableRow = ({ filteredResults }) => {
     return (
         <tbody>
-            {results.map(emp => (
+            {filteredResults.map(emp => (
                 <tr key={emp.id.value}>
                     <th scope="row"><img src={emp.picture.thumbnail} alt={emp.name.first} className="img-thumbnail" /></th>
                     <td>{emp.name.last}, {emp.name.first}</td>
