@@ -2,7 +2,7 @@
 An employee directory application using React that will allow quick access to employee information for the user.
 
 ## Link to deployed application
-[React Employee Directory]()
+[React Employee Directory](https://eunahk92.github.io/Employee-Directory/)
 
 ## User Story
 ```
