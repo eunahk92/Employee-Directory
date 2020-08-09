@@ -1,7 +1,7 @@
 # Employee-Directory
 An employee directory application using React that will allow quick access to employee information for the user.
 
-## Link to deployed application on Heroku
+## Link to deployed application
 [React Employee Directory]()
 
 ## User Story
